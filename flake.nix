@@ -36,6 +36,7 @@
           llvmPackages.bintools
           lldb
           llvmPackages_19.clangUseLLVM
+          libiconv
         ];
 
         # https://github.com/ziglang/zig/issues/18998
