@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "ffi"
+name = "calc"
 version = "0.1.0"

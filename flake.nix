@@ -1,12 +1,16 @@
 {
-  description = "A basic flake for git-cliff, Rust, and Zig development";
+  description = "A basic flake for rust, and zig development";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { nixpkgs, flake-utils, ... }:
+  outputs = {
+    nixpkgs,
+    flake-utils,
+    ...
+  }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
@@ -14,7 +18,6 @@
     in {
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = with pkgs; [
-          # Git tooling
           git-cliff
           gnupg
           pre-commit
@@ -32,12 +35,13 @@
           pkg-config
           llvmPackages.bintools
           lldb
+          llvmPackages_19.clangUseLLVM
         ];
 
+        # https://github.com/ziglang/zig/issues/18998
         shellHook = ''
-          echo "🚀 Welcome to your Rust & Zig dev environment!"
-          echo "🔧 Rust version: $(rustc --version)"
-          echo "⚡ Zig version: $(zig version)"
+          unset NIX_CFLAGS_COMPILE
+          unset NIX_LDFLAGS
         '';
       };
     });
