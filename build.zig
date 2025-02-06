@@ -20,16 +20,19 @@ pub fn build(b: *std.Build) void {
 
     if (b.host.result.os.tag == .macos) {
         exe.linkSystemLibrary("SDL2");
+        exe.linkSystemLibrary("SDL2_ttf");
         exe.linkFramework("IOKit");
         exe.linkFramework("Metal");
     } else if (b.host.result.os.tag == .linux) {
         exe.linkSystemLibrary("SDL2");
+        exe.linkSystemLibrary("SDL2_ttf");
     } else {
         const sdl_dep = b.dependency("SDL", .{
             .optimize = .ReleaseFast,
             .target = b.host,
         });
         exe.linkLibrary(sdl_dep.artifact("SDL2"));
+        exe.linkSystemLibrary("SDL2_ttf");
     }
 
     b.installArtifact(exe);
