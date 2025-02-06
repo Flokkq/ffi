@@ -4,7 +4,7 @@ const std = @import("std");
 extern fn boop() void;
 
 pub fn main() !void {
-    std.debug.print("Beep");
+    std.debug.print("Zig\n", .{});
     boop();
-    std.debug.print("Beep");
+    std.debug.print("Zig\n", .{});
 }
