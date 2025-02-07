@@ -69,6 +69,7 @@ pub fn build(b: *std.Build) !void {
     // This is where the interesting part begins.
     // As you can see we are re-defining the same executable but
     // we're binding it to a dedicated build step.
+    // This allows zls to use further compile time checks
     const exe_check = b.addExecutable(.{
         .name = "foo",
         .root_source_file = b.path("src/main.zig"),
@@ -87,7 +88,14 @@ pub fn build(b: *std.Build) !void {
     b.installArtifact(exe);
 
     // These two lines you might want to copy
-    // (make sure to rename 'exe_check')
     const check = b.step("check", "Check if foo compiles");
     check.dependOn(&exe_check.step);
+
+    // Run runs the final exe
+    {
+        const run_cmd = b.addRunArtifact(exe);
+        if (b.args) |args| run_cmd.addArgs(args);
+        const run_step = b.step("run", "Run the app");
+        run_step.dependOn(&run_cmd.step);
+    }
 }
