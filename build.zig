@@ -66,6 +66,17 @@ pub fn build(b: *std.Build) !void {
         .optimize = opt,
     });
 
+    // This is where the interesting part begins.
+    // As you can see we are re-defining the same executable but
+    // we're binding it to a dedicated build step.
+    const exe_check = b.addExecutable(.{
+        .name = "foo",
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = opt,
+    });
+
+    // Any other code to define dependencies would probably be here.
     exe.linkLibC();
     const rust_lib = try setupRust(b, opt);
     exe.addLibraryPath(rust_lib.dirname());
@@ -74,4 +85,9 @@ pub fn build(b: *std.Build) !void {
     linkSDL(b, exe, target);
 
     b.installArtifact(exe);
+
+    // These two lines you might want to copy
+    // (make sure to rename 'exe_check')
+    const check = b.step("check", "Check if foo compiles");
+    check.dependOn(&exe_check.step);
 }
