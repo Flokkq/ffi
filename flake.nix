@@ -32,15 +32,17 @@
           zls
 
           SDL2
-          SDL2.dev
+          SDL2_image_2_6
           SDL2_ttf
           SDL2_gfx
-          SDL2_image
 
           # Extra tools for cross-compilation or debugging
           pkg-config
           llvmPackages.bintools
           lldb
+          gcc
+          cmake
+          llvmPackages_19.clang-tools
         ];
 
         # https://github.com/ziglang/zig/issues/18998
